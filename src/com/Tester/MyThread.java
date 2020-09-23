@@ -5,8 +5,5 @@ public class MyThread extends Thread {
     public MyThread(int k){
         this.k=k;
     }
-
-    public int getK(){
-        return k;
-    }
+    public int getK(){ return k;}
 }

@@ -1,18 +1,13 @@
 package com.TestMethod;
-
 import com.Calculator.Calculator;
 import com.Printer.TestMethodPrinter;
-
 public class MyTestMethod extends TestMethod {
-
-
     public MyTestMethod(Calculator calculator, TestMethodPrinter printer) {
         super(calculator, printer);
     }
-
     @Override
     public void runTest() {
-        for (int i=0;i<10;i++){
+        for (int i=0;i<20;i++){
             double x= Math.random();
             double y=Math.random();
             ISampleTest sample= new AddSampleTest();
