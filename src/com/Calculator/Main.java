@@ -7,22 +7,36 @@ import com.Printer.Printer;
 import com.Printer.TestMethodPrinter;
 import com.TestMethod.*;
 import com.Tester.Tester;
+
+import java.util.LinkedList;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 	// create two calculators
-        Calculator c1=new Calculator("Crystal 1");
-        Calculator c2=new Calculator("Crystal 2");
+
+        runSimolation(2);
+
+    }
+
+    private static void runSimolation(int numOfCalculators) throws InterruptedException {
+        TestMethodPrinter testMethodPrinter=new MyTestMethodPrinter();
+
+        List<TestMethod> testMethodList= new LinkedList<>();
+        List<Calculator> calculators= new LinkedList<>();
+
+        for (int i=1;i<=2;i++){
+            Calculator c=new Calculator("Crystal"+i);
+            calculators.add(c);
+            testMethodList.add(new MyTestMethod(c,testMethodPrinter));
+        }
+
 
         IEvaluationFormula formula=new EvaluationFormula();
         Printer printer=new MyPrinter();  //print Tester as you like - for example like MyPrinter
-        TestMethodPrinter testMethodPrinter=new MyTestMethodPrinter();
 
-        TestMethod testMethod1=new MyTestMethod(c1,testMethodPrinter);
-        TestMethod testMethod2=new MyTestMethod(c2,testMethodPrinter);
-
-        Tester tester=new Tester("Tester", c1,c2,printer,testMethod1,testMethod2,formula);
+        Tester tester=new Tester("Tester", calculators,printer,testMethodList,formula);
         tester.runTest();
-
     }
 }

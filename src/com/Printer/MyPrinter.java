@@ -1,28 +1,31 @@
 package com.Printer;
+import java.util.List;
+
 
 public class MyPrinter extends Printer {
 
     public MyPrinter() { }
 
     @Override
-    public void printByFormat(String c1Name,String c2Name,double accuracyC1, double accuracyC2,String testDesc1, String testDesc2) {
+    public void printByFormat(List<Object[]> info) {
 
 
-        System.out.println("Calculator "+ c1Name+ ":");
-        System.out.println(testDesc1);
+        for (int i=0;i<info.size();i++){
+            System.out.println("Calculator "+ info.get(i)[0]+ ":");
+            System.out.println(info.get(i)[2]);
+        }
 
-        System.out.println("Calculator "+ c2Name +":");
-        System.out.println(testDesc2);
+        double best=0.0;
+        for (int i=0;i<info.size();i++) {
+            double rate=(double)info.get(i)[1];
+            System.out.println(info.get(i)[0] + " Success rate: " + rate);
+            if (rate>best) best=rate;
 
-
-        System.out.println(c1Name+ " Success rate: "+ accuracyC1);
-        System.out.println(c2Name + " Success rate: "+ accuracyC2);
-
-        if (accuracyC1>accuracyC2)
-            System.out.println(c1Name + " is better");
-        else if (accuracyC1< accuracyC2)
-            System.out.println(c2Name+ " is better");
-        else
-            System.out.println(c1Name+ " and "+ c2Name +" have the same accuracy");
+        }
+        System.out.printf("Best: ");
+        for (int i=0;i<info.size();i++){
+            if((double)info.get(i)[1]==best)
+                System.out.printf(info.get(i)[0]+ " ");
+        }
     }
 }
