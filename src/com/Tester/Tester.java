@@ -4,25 +4,25 @@ import com.Printer.Printer;
 import com.TestMethod.TestMethod;
 import com.EvaluationFormula.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * keep modularity- its possible change score formula, printing ,add actions
  */
 public class Tester {
     String name;
-    Calculator c1;
-    Calculator c2;
+    List<Calculator> calculatorList;
     Printer printer;
-    TestMethod testMethod1;
-    TestMethod testMethod2;
+    List<TestMethod> testMethodList;
     IEvaluationFormula formula;
 
-    public Tester(String name, Calculator c1, Calculator c2, Printer printer, TestMethod testMethod1,TestMethod testMethod2, IEvaluationFormula formula) {
+    public Tester(String name, List<Calculator> calculatorList, Printer printer, List<TestMethod> testMethodList, IEvaluationFormula formula) {
         this.name = name;
-        this.c1 = c1;
-        this.c2 = c2;
+        this.calculatorList=calculatorList;
         this.printer = printer;
-        this.testMethod1 = testMethod1;
-        this.testMethod2 = testMethod2;
+        this.testMethodList=testMethodList;
         this.formula = formula;
     }
 
@@ -32,31 +32,47 @@ public class Tester {
      * print to console
      */
     public void runTest() throws InterruptedException {
-        Thread t1= new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testMethod1.runTest();
 
-            }
-        });
+        //Run Tests using Threads
+        List<Thread> threads= new LinkedList<>();
 
-        Thread t2= new Thread(new Runnable() {
-            @Override
-            public void run() {
-                testMethod2.runTest();
+        for (int i=0;i<calculatorList.size();i++){
+            Thread t= new MyThread(i) {
+                @Override
+                public void run() {
+                    testMethodList.get(getK()).runTest();
 
-            }
-        });
-        t1.run();
-        t2.run();
+                }
+            };
+            threads.add(t);
+        }
 
-        t1.join();
-        t2.join();
+        for (Thread t: threads){
+            t.run();
+        }
 
-        double accuracyC1=formula.evaluate(testMethod1.getSuccess(),testMethod1.getFails());
-        double accuracyC2=formula.evaluate(testMethod2.getSuccess(),testMethod2.getFails());
+        for (Thread t: threads){
+            t.join();
+        }
 
-        printer.printByFormat(c1.getName(),c2.getName(),accuracyC1,accuracyC2,testMethod1.getTestsPrint().toString(),testMethod2.getTestsPrint().toString());
+
+        //Calculate Accuracy
+        // - String Calculator Name,
+        // - accuracy rate
+        //- tests print
+        List<Object[]> info=new ArrayList<>();
+
+        for (int i=0;i<calculatorList.size();i++){
+            Object[] calculatorInfo=new Object[3];
+            calculatorInfo[0]=calculatorList.get(i).getName();
+            TestMethod testMethod= testMethodList.get(i);
+            calculatorInfo[1]=formula.evaluate(testMethod.getSuccess(),testMethod.getFails());
+            calculatorInfo[2]=testMethod.getTestsPrint().toString();
+
+            info.add(calculatorInfo);
+        }
+
+        printer.printByFormat(info);
 
     }
 
