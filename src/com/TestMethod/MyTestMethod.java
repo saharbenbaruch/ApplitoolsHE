@@ -15,14 +15,11 @@ public class MyTestMethod extends TestMethod {
         for (int i=0;i<10;i++){
             double x= Math.random();
             double y=Math.random();
-            double result=calculator.add(x,y);
-            if (result==x+y)
-                success++;
-
-            else
-                fails++;
-
-            testsPrint.append(testMethodPrinter.printTest(x,y,result,"+"));
+            ISampleTest sample= new AddSampleTest();
+            Object[] info=sample.test(calculator,success,testsPrint,testMethodPrinter,fails,x,y);
+            success=(int)info[0];
+            fails=(int)info[1];
+            testsPrint=(StringBuilder) info[2];
         }
     }
 }
