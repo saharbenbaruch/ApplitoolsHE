@@ -15,19 +15,17 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 	// create two calculators
-
-        runSimolation(2);
-
+        runSimulation(2);
     }
 
-    private static void runSimolation(int numOfCalculators) throws InterruptedException {
+    private static void runSimulation(int numOfCalculators) throws InterruptedException {
         TestMethodPrinter testMethodPrinter=new MyTestMethodPrinter();
 
         List<TestMethod> testMethodList= new LinkedList<>();
         List<Calculator> calculators= new LinkedList<>();
 
-        for (int i=1;i<=2;i++){
-            Calculator c=new Calculator("Crystal"+i);
+        for (int i=1;i<=numOfCalculators;i++){
+            Calculator c=new Calculator("Crystal "+i);
             calculators.add(c);
             testMethodList.add(new MyTestMethod(c,testMethodPrinter));
         }
